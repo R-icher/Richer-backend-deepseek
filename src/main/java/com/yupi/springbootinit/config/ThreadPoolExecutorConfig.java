@@ -1,0 +1,44 @@
+package com.yupi.springbootinit.config;
+
+import com.yupi.springbootinit.monitor.AiQueueMonitor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+@Configuration
+public class ThreadPoolExecutorConfig {
+
+    /**
+     * 自定义线程工厂 ，这里就是为每个线程命名
+     */
+    ThreadFactory threadFactory = new ThreadFactory() {
+        private int count = 1;
+        @Override
+        public Thread newThread(@NotNull Runnable r) {
+            Thread thread = new Thread(r);
+            thread.setName("线程：" + count);
+            count++;
+            return thread;
+        }
+    };
+
+    @Bean
+    public ThreadPoolExecutor threadPoolExecutor(){
+        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(2, 10,
+                100, TimeUnit.SECONDS,
+                new ArrayBlockingQueue<>(10), threadFactory);
+        return threadPoolExecutor;
+    }
+
+    // 设置一个监听器类，用来监视阻塞队列中有多少个正在等待的任务
+    @Bean
+    public AiQueueMonitor aiQueueMonitor(ThreadPoolExecutor executor) {
+        return new AiQueueMonitor(executor);
+    }
+}
+
