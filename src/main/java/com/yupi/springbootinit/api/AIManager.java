@@ -1,4 +1,4 @@
-package com.yupi.springbootinit.manager;
+package com.yupi.springbootinit.api;
 
 import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpResponse;
