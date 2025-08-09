@@ -2,6 +2,7 @@ package com.yupi.springbootinit.config;
 
 import com.yupi.springbootinit.monitor.AiQueueMonitor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -9,6 +10,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 @Component
 @Slf4j
+@EnableScheduling
 public class DynamicThreadPoolScaler {
     // 注入线程池
     private final ThreadPoolExecutor threadPoolExecutor;
