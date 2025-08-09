@@ -1,7 +1,7 @@
 package com.yupi.springbootinit.bizmq;
 
 import com.rabbitmq.client.Channel;
-import com.yupi.springbootinit.api.AIManager;
+import com.yupi.springbootinit.manager.AIManager;
 import com.yupi.springbootinit.common.ErrorCode;
 import com.yupi.springbootinit.exception.BusinessException;
 import com.yupi.springbootinit.model.entity.Chart;
