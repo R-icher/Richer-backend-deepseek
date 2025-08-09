@@ -35,5 +35,11 @@ public class ThreadPoolExecutorConfig {
         return threadPoolExecutor;
     }
 
+    // 设置一个监听器类，用来监视阻塞队列中有多少个正在等待的任务
+    @Bean
+    public AiQueueMonitor aiQueueMonitor(ThreadPoolExecutor executor) {
+        return new AiQueueMonitor(executor);
+    }
+
 }
 
