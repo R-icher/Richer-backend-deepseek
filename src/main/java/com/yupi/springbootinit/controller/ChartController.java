@@ -461,7 +461,7 @@ public class ChartController {
      * @param id
      * @return
      */
-    @GetMapping("/chart/{id}/data")
+    @GetMapping("/{id}/data")
     public BaseResponse<List<Map<String, Object>>> getChartData(@PathVariable Long id) {
         List<Map<String, Object>> data = chartService.queryChartData(id);
         return ResultUtils.success(data);

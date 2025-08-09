@@ -6,8 +6,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import java.util.List;
 import java.util.Map;
 
+
 /**
- *
+ * 动态创建数据
  */
 public interface ChartService extends IService<Chart> {
 

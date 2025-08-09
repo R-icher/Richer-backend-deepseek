@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 动态建表
+ * 动态建表+查询
  */
 @Service
 public class ChartServiceImpl extends ServiceImpl<ChartMapper, Chart>
