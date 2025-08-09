@@ -1,12 +1,11 @@
 package com.yupi.springbootinit.bizmq;
 
 import com.rabbitmq.client.Channel;
-import com.yupi.springbootinit.api.AIManager;
+import com.yupi.springbootinit.manager.AIManager;
 import com.yupi.springbootinit.common.ErrorCode;
 import com.yupi.springbootinit.exception.BusinessException;
 import com.yupi.springbootinit.model.entity.Chart;
 import com.yupi.springbootinit.service.ChartService;
-import com.yupi.springbootinit.utils.ExcelUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
