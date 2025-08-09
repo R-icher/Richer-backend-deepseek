@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @Entity com.yupi.springbootinit.model.entity.Chart
+ * 动态建表
  */
 public interface ChartMapper extends BaseMapper<Chart> {
     /**

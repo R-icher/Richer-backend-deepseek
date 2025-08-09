@@ -3,25 +3,21 @@ package com.yupi.springbootinit.controller;
 import cn.hutool.core.io.FileUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.google.gson.Gson;
 import com.yupi.springbootinit.annotation.AuthCheck;
-import com.yupi.springbootinit.api.AIManager;
+import com.yupi.springbootinit.manager.AIManager;
 import com.yupi.springbootinit.bizmq.BIProducer;
 import com.yupi.springbootinit.common.BaseResponse;
 import com.yupi.springbootinit.common.DeleteRequest;
 import com.yupi.springbootinit.common.ErrorCode;
 import com.yupi.springbootinit.common.ResultUtils;
 import com.yupi.springbootinit.constant.CommonConstant;
-import com.yupi.springbootinit.constant.FileConstant;
 import com.yupi.springbootinit.constant.UserConstant;
 import com.yupi.springbootinit.exception.BusinessException;
 import com.yupi.springbootinit.exception.ThrowUtils;
 import com.yupi.springbootinit.manager.RedisLimiterManager;
 import com.yupi.springbootinit.model.dto.chart.*;
-import com.yupi.springbootinit.model.dto.file.UploadFileRequest;
 import com.yupi.springbootinit.model.entity.Chart;
 import com.yupi.springbootinit.model.entity.User;
-import com.yupi.springbootinit.model.enums.FileUploadBizEnum;
 import com.yupi.springbootinit.model.vo.BIResponse;
 import com.yupi.springbootinit.service.ChartService;
 import com.yupi.springbootinit.service.UserService;
@@ -29,7 +25,6 @@ import com.yupi.springbootinit.utils.ExcelUtils;
 import com.yupi.springbootinit.utils.SqlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -37,18 +32,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadPoolExecutor;
 
 /**
- * 帖子接口
- *
- * @author <a href="https://github.com/liyupi">程序员鱼皮</a>
- * @from <a href="https://yupi.icu">编程导航知识星球</a>
+ * 表格接口
  */
 @RestController
 @RequestMapping("/chart")
@@ -445,6 +437,10 @@ public class ChartController {
         chart.setStatus("wait");
         // 保存到数据库
         boolean save = chartService.save(chart);
+        Long chartId = chart.getId();
+
+        // 将用户输入的表格数据拆分成一张新表，便于查询
+        chartService.saveCVSData(result, chartId);
         ThrowUtils.throwIf(!save, ErrorCode.SYSTEM_ERROR, "图表保存失败");
 
         // 插入数据库后获得了图表的 id
@@ -458,5 +454,16 @@ public class ChartController {
         biResponse.setChartId(newChartId);
 
         return ResultUtils.success(biResponse);
+    }
+
+    /**
+     * 当用户想要查询自己插入到excel表格中的数据，就可以使用下面的方法把数据库表中的信息查询出来
+     * @param id
+     * @return
+     */
+    @GetMapping("/chart/{id}/data")
+    public BaseResponse<List<Map<String, Object>>> getChartData(@PathVariable Long id) {
+        List<Map<String, Object>> data = chartService.queryChartData(id);
+        return ResultUtils.success(data);
     }
 }
